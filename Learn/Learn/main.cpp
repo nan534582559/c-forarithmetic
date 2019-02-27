@@ -67,10 +67,16 @@ void FindValueData()
 			s_Value[s_DataVec[i].m_DataVec[j]] = s_Value[s_DataVec[i].m_DataVec[j]] + 1;
 		}
 	}
-	for (size_t i = 0; i < 36; i++)
+	map<int, double>::iterator iter;
+
+	for (iter = s_Value.begin(); iter != s_Value.end(); iter++)
 	{
-		s_Value[i] = s_Value[i] / s_DataVec.size();
+		printf("%d  %f  \n", iter->first, iter->second);
 	}
+	//for (size_t i = 0; i < 36; i++)
+	//{
+	//	s_Value[i] = s_Value[i] / s_DataVec.size();
+	//}
 }
 
 void FindWeight()
@@ -79,7 +85,7 @@ void FindWeight()
 	{
 		for (size_t j = 0; j < s_DataVec[i].m_DataVec.size(); j++)
 		{
-			s_Value[s_DataVec[i].m_DataVec[j]] = s_Value[s_DataVec[i].m_DataVec[j]] * pow(s_Weight, s_DataVec.size() - i);
+			s_Value[s_DataVec[i].m_DataVec[j]] = s_Value[s_DataVec[i].m_DataVec[j]] * (1 - pow(s_Weight, s_DataVec.size() - i));
 		}
 	}
 	map<int, double>::iterator iter;
