@@ -4,13 +4,15 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <functional>
+#include<algorithm>
 #include "Data.h"
 
 using namespace std;
 vector<Data> s_DataVec;
 Data s_DataMean;
 vector<double> s_DataMeanVec;
-double s_Weight = 0.5;
+double s_Weight = 0.9;
 map<int,double> s_Value;
 
 void Init()
@@ -27,10 +29,9 @@ void Init()
 
 void ReadTxt(string file)
 {
-	
 	ifstream infile;
-	infile.open(file.data());   //将文件流对象与文件连接起来 
-	assert(infile.is_open());   //若失败,则输出错误消息,并终止程序运行 
+	infile.open(file.data());   
+	assert(infile.is_open());   
 
 	string s;
 	while (getline(infile, s))
@@ -40,7 +41,7 @@ void ReadTxt(string file)
 		cout << s << endl;
 		s_DataVec.push_back(dData);
 	}
-	infile.close();            //关闭文件输入流 
+	infile.close();
 }
 
 void FindMean()
@@ -68,15 +69,14 @@ void FindValueData()
 		}
 	}
 	map<int, double>::iterator iter;
-
 	for (iter = s_Value.begin(); iter != s_Value.end(); iter++)
 	{
 		printf("%d  %f  \n", iter->first, iter->second);
 	}
-	//for (size_t i = 0; i < 36; i++)
-	//{
-	//	s_Value[i] = s_Value[i] / s_DataVec.size();
-	//}
+}
+
+bool cmp(const pair<int, double>& a, const pair<int, double>& b) {
+	return a.second < b.second;
 }
 
 void FindWeight()
@@ -94,6 +94,12 @@ void FindWeight()
 	{
 		printf("%d  %f  \n", iter->first, iter->second);
 	}
+
+	vector<pair<int, double>> vec(s_Value.begin(), s_Value.end());
+	//对线性的vector进行排序
+	sort(vec.begin(), vec.end(), cmp);
+	for (int i = 0; i < vec.size(); ++i)
+		cout << vec[i].first << "   ==  " << vec[i].second << endl;
 }
 
 int main(int argc, char* argv[])
